@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAGE Watches — Unleash Your Time</title>
+    <meta name="description"
+        content="RAGE Watches — Bold, fearless timepieces engineered for those who live on the edge. Explore our collection of luxury watches.">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* ── Reset & Base ─────────────────────────────────── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: #ff1e56;
+            color: #fff;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff1e56;
+            border-radius: 10px;
+        }
+
+        /* ── Loader ───────────────────────────────────────── */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity .6s ease;
+        }
+
+        #loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-ring {
+            width: 70px;
+            height: 70px;
+            border: 4px solid rgba(255, 30, 86, .15);
+            border-top-color: #ff1e56;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── Header ───────────────────────────────────────── */
+        header {
+            position: fixed;
+            width: 100%;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, .75);
+            backdrop-filter: blur(14px);
+            z-index: 1000;
+            transition: padding .4s, background .4s;
+        }
+
+        header.scrolled {
+            padding: 12px 50px;
+            background: rgba(10, 10, 10, .95);
+            box-shadow: 0 2px 30px rgba(255, 30, 86, .08);
+        }
+
+        .logo {
+            font-weight: 900;
+            font-size: 28px;
+            letter-spacing: 3px;
+            color: #ff1e56;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            font-size: 10px;
+            color: #666;
+            letter-spacing: 1px;
+            font-weight: 600;
+            display: block;
+            margin-top: 2px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #ccc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            transition: .3s;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff1e56;
+            transition: .3s;
+        }
+
+        nav a:hover {
+            color: #fff;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: #fff;
+            border-radius: 3px;
+            transition: .3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+
+        /* ── Hero ─────────────────────────────────────────── */
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a10 50%, #0a0a0a 100%);
+            z-index: 0;
+        }
+
+        .hero-particles {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .hero-particles span {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #ff1e56;
+            border-radius: 50%;
+            opacity: .3;
+            animation: float-particle 8s infinite ease-in-out;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero h2 {
+            font-size: clamp(36px, 7vw, 72px);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1.1;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: heroFadeUp 1s ease .3s forwards;
+        }
+
+        .hero h2 .accent {
+            color: #ff1e56;
+            display: inline-block;
+        }
+
+        .hero p {
+            margin-top: 24px;
+            font-size: clamp(16px, 2vw, 22px);
+            color: #aaa;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: heroFadeUp 1s ease .6s forwards;
+        }
+
+        .hero .btn-group {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: heroFadeUp 1s ease .9s forwards;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 44px;
+            background: #ff1e56;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            border-radius: 50px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: .4s;
+            border: 2px solid #ff1e56;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: #ff1e56;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 30, 86, .3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, .3);
+        }
+
+        .btn-outline:hover {
+            border-color: #fff;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, .1);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            opacity: 0;
+            animation: heroFadeUp 1s ease 1.2s forwards;
+        }
+
+        .scroll-indicator .mouse {
+            width: 26px;
+            height: 42px;
+            border: 2px solid rgba(255, 255, 255, .3);
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            padding-top: 8px;
+        }
+
+        .scroll-indicator .wheel {
+            width: 4px;
+            height: 10px;
+            background: #ff1e56;
+            border-radius: 4px;
+            animation: scrollWheel 2s infinite;
+        }
+
+        @keyframes heroFadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scrollWheel {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+        }
+
+        @keyframes float-particle {
+
+            0%,
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+
+            25% {
+                transform: translateY(-40px) translateX(20px);
+            }
+
+            50% {
+                transform: translateY(-10px) translateX(-15px);
+            }
+
+            75% {
+                transform: translateY(-50px) translateX(10px);
+            }
+        }
+
+        /* ── Section Shared ───────────────────────────────── */
+        section {
+            padding: 120px 8%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            color: #ff1e56;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            color: #777;
+            font-size: 17px;
+            margin-top: 16px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        /* ── Products ─────────────────────────────────────── */
+        #collection {
+            background: #0a0a0a;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .06);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 24px;
+            text-align: center;
+            transition: .5s cubic-bezier(.25, .8, .25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 30, 86, .05), transparent);
+            transition: .6s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(255, 30, 86, .25);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, .5), 0 0 40px rgba(255, 30, 86, .08);
+        }
+
+        .card-img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 18px;
+            transition: .5s;
+        }
+
+        .card:hover .card-img {
+            transform: scale(1.05);
+        }
+
+        .card h3 {
+            margin: 20px 0 6px;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .card .price {
+            color: #ff1e56;
+            font-size: 22px;
+            font-weight: 900;
+            margin: 8px 0 16px;
+        }
+
+        .card .price .old {
+            color: #555;
+            font-size: 15px;
+            text-decoration: line-through;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .card .card-btn {
+            display: inline-block;
+            padding: 12px 32px;
+            border: 2px solid #ff1e56;
+            color: #ff1e56;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: .3s;
+        }
+
+        .card .card-btn:hover {
+            background: #ff1e56;
+            color: #fff;
+        }
+
+        .badge {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: #ff1e56;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        /* ── Features ─────────────────────────────────────── */
+        #features {
+            background: #0e0e0e;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 50px 30px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, .02);
+            border: 1px solid rgba(255, 255, 255, .05);
+            transition: .4s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(255, 30, 86, .2);
+            transform: translateY(-6px);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .feature-card p {
+            color: #888;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* ── About / Story ────────────────────────────────── */
+        #story {
+            background: #0a0a0a;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .story-visual {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+        }
+
+        .story-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: .5s;
+        }
+
+        .story-visual:hover img {
+            transform: scale(1.05);
+        }
+
+        .story-visual::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(10, 10, 10, .8) 100%);
+        }
+
+        .story-text h3 {
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        .story-text h3 .accent {
+            color: #ff1e56;
+        }
+
+        .story-text p {
+            color: #999;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 18px;
+        }
+
+        .story-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 36px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat .num {
+            font-size: 36px;
+            font-weight: 900;
+            color: #ff1e56;
+        }
+
+        .stat .label {
+            font-size: 12px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        /* ── Testimonials ─────────────────────────────────── */
+        #reviews {
+            background: #0e0e0e;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .testimonial {
+            padding: 40px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .05);
+            transition: .4s;
+        }
+
+        .testimonial:hover {
+            border-color: rgba(255, 30, 86, .2);
+        }
+
+        .testimonial .stars {
+            color: #ff1e56;
+            font-size: 18px;
+            margin-bottom: 18px;
+            letter-spacing: 3px;
+        }
+
+        .testimonial p {
+            color: #bbb;
+            font-size: 15px;
+            line-height: 1.8;
+            font-style: italic;
+            margin-bottom: 24px;
+        }
+
+        .testimonial .author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .testimonial .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff1e56, #ff6b35);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .testimonial .author-info .name {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .testimonial .author-info .role {
+            color: #666;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        /* ── Newsletter ───────────────────────────────────── */
+        #newsletter {
+            background: linear-gradient(135deg, #1a0a10 0%, #0a0a0a 100%);
+            text-align: center;
+        }
+
+        .newsletter-form {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            min-width: 220px;
+            padding: 16px 24px;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, .1);
+            background: rgba(255, 255, 255, .05);
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+            transition: .3s;
+        }
+
+        .newsletter-form input::placeholder {
+            color: #666;
+        }
+
+        .newsletter-form input:focus {
+            border-color: #ff1e56;
+        }
+
+        .newsletter-form button {
+            padding: 16px 36px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* ── Footer ───────────────────────────────────────── */
+        footer {
+            background: #050505;
+            padding: 80px 8% 30px;
+            border-top: 1px solid rgba(255, 255, 255, .05);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-brand .logo-text {
+            font-weight: 900;
+            font-size: 26px;
+            color: #ff1e56;
+            letter-spacing: 3px;
+        }
+
+        .footer-brand p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-top: 16px;
+            max-width: 300px;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .footer-col a {
+            display: block;
+            color: #777;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 12px;
+            transition: .3s;
+        }
+
+        .footer-col a:hover {
+            color: #ff1e56;
+            padding-left: 6px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, .1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+            text-decoration: none;
+            font-size: 16px;
+            transition: .3s;
+        }
+
+        .social-links a:hover {
+            background: #ff1e56;
+            border-color: #ff1e56;
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            color: #444;
+            font-size: 13px;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, .05);
+        }
+
+        /* ── Scroll-reveal animation ──────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 {
+            transition-delay: .15s;
+        }
+
+        .reveal-delay-2 {
+            transition-delay: .3s;
+        }
+
+        .reveal-delay-3 {
+            transition-delay: .45s;
+        }
+
+        /* ── Back to top ──────────────────────────────────── */
+        #back-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: #ff1e56;
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: .4s;
+            z-index: 900;
+            box-shadow: 0 4px 20px rgba(255, 30, 86, .4);
+        }
+
+        #back-top.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #back-top:hover {
+            transform: translateY(-4px) scale(1.1);
+        }
+
+        /* ── Responsive ───────────────────────────────────── */
+        @media(max-width:900px) {
+            header {
+                padding: 16px 24px;
+            }
+
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: rgba(10, 10, 10, .97);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                gap: 30px;
+                align-items: center;
+                transition: .5s;
+            }
+
+            nav.open {
+                right: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .story-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .story-stats {
+                justify-content: center;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media(max-width:600px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .products {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Loader -->
+    <div id="loader">
+        <div class="loader-ring"></div>
+    </div>
+
+    <!-- Header -->
+    <header id="main-header">
+        <a href="#" class="logo">RAGE<span>WATCHES</span></a>
+        <nav id="main-nav">
+            <a href="#collection">Collection</a>
+            <a href="#features">Features</a>
+            <a href="#story">Our Story</a>
+            <a href="#reviews">Reviews</a>
+            <a href="#newsletter">Contact</a>
+        </nav>
+        <div class="hamburger" id="hamburger" aria-label="Toggle Menu">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-particles" id="particles"></div>
+        <div class="hero-content">
+            <h2>Unleash <span class="accent">Your</span> Time</h2>
+            <p>Bold. Fearless. Unapologetic. Engineered for those who live on the edge and never look back.</p>
+            <div class="btn-group">
+                <a href="#collection" class="btn">Explore Collection</a>
+                <a href="#story" class="btn btn-outline">Our Story</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collection -->
+    <section id="collection">
+        <div class="section-header reveal">
+            <div class="section-tag">⬥ Collection</div>
+            <h2 class="section-title">Iconic Timepieces</h2>
+            <p class="section-subtitle">Each watch is a statement — crafted from premium materials, designed to
+                dominate.</p>
+        </div>
+        <div class="products">
+            <div class="card reveal reveal-delay-1">
+                <div class="badge">New</div>
+                <img class="card-img"
+                    src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=600&q=80"
+                    alt="Rage Phantom watch">
+                <h3>PHANTOM</h3>
+                <div class="price"><span class="old">$599</span> $449</div>
+                <a href="#" class="card-btn">Add to Cart</a>
+            </div>
+            <div class="card reveal reveal-delay-2">
+                <div class="badge">Bestseller</div>
+                <img class="card-img"
+                    src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=600&q=80"
+                    alt="Rage Vortex watch">
+                <h3>VORTEX</h3>
+                <div class="price"><span class="old">$699</span> $549</div>
+                <a href="#" class="card-btn">Add to Cart</a>
+            </div>
+            <div class="card reveal reveal-delay-3">
+                <img class="card-img"
+                    src="https://images.unsplash.com/photo-1533139502658-0198f920d8e8?auto=format&fit=crop&w=600&q=80"
+                    alt="Rage Inferno watch">
+                <h3>INFERNO</h3>
+                <div class="price">$399</div>
+                <a href="#" class="card-btn">Add to Cart</a>
+            </div>
+            <div class="card reveal reveal-delay-1">
+                <div class="badge">Limited</div>
+                <img class="card-img"
+                    src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=600&q=80"
+                    alt="Rage Eclipse watch">
+                <h3>ECLIPSE</h3>
+                <div class="price"><span class="old">$899</span> $749</div>
+                <a href="#" class="card-btn">Add to Cart</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+        <div class="section-header reveal">
+            <div class="section-tag">⬥ Why RAGE</div>
+            <h2 class="section-title">Built Different</h2>
+            <p class="section-subtitle">Precision engineering meets fearless design. Every detail matters.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card reveal reveal-delay-1">
+                <div class="feature-icon">⚙️</div>
+                <h3>Swiss Movement</h3>
+                <p>Premium automatic Swiss movements trusted for precision and uncompromising reliability.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-2">
+                <div class="feature-icon">💎</div>
+                <h3>Sapphire Crystal</h3>
+                <p>Scratch-resistant sapphire glass — tougher than anything you'll throw at it.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-3">
+                <div class="feature-icon">🌊</div>
+                <h3>300m Water Resist</h3>
+                <p>Dive deep, stay fearless. Engineered to withstand extreme underwater pressure.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-1">
+                <div class="feature-icon">🛡️</div>
+                <h3>Titanium Case</h3>
+                <p>Aerospace-grade titanium for an ultra-light, ultra-strong build that lasts forever.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story -->
+    <section id="story">
+        <div class="story-grid">
+            <div class="story-visual reveal">
+                <img src="https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=800&q=80"
+                    alt="Watchmaker at work">
+            </div>
+            <div class="story-text reveal reveal-delay-2">
+                <div class="section-tag">⬥ Our Story</div>
+                <h3>Born From <span class="accent">Rebellion</span></h3>
+                <p>RAGE was forged in 2018 by a collective of rogue designers and master watchmakers who were tired of
+                    playing it safe. We don't follow trends — we shatter them.</p>
+                <p>Every RAGE timepiece is hand-assembled with obsessive precision, combining cutting-edge technology
+                    with raw, unapologetic design language.</p>
+                <div class="story-stats">
+                    <div class="stat">
+                        <div class="num">50K+</div>
+                        <div class="label">Watches Sold</div>
+                    </div>
+                    <div class="stat">
+                        <div class="num">120+</div>
+                        <div class="label">Countries</div>
+                    </div>
+                    <div class="stat">
+                        <div class="num">4.9★</div>
+                        <div class="label">Avg Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews -->
+    <section id="reviews">
+        <div class="section-header reveal">
+            <div class="section-tag">⬥ Testimonials</div>
+            <h2 class="section-title">Words From The Bold</h2>
+            <p class="section-subtitle">Real people. Real watches. Real obsession.</p>
+        </div>
+        <div class="testimonials">
+            <div class="testimonial reveal reveal-delay-1">
+                <div class="stars">★★★★★</div>
+                <p>"The Phantom is the most stunning watch I've ever owned. The weight, the finish, the way it catches
+                    every light — it's addictive."</p>
+                <div class="author">
+                    <div class="avatar">A</div>
+                    <div class="author-info">
+                        <div class="name">Alex Mercer</div>
+                        <div class="role">Entrepreneur, NYC</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial reveal reveal-delay-2">
+                <div class="stars">★★★★★</div>
+                <p>"I've collected watches for 15 years. RAGE Vortex is the only one that makes people stop and ask.
+                    Absolutely worth every penny."</p>
+                <div class="author">
+                    <div class="avatar">S</div>
+                    <div class="author-info">
+                        <div class="name">Sofia Chen</div>
+                        <div class="role">Designer, Tokyo</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial reveal reveal-delay-3">
+                <div class="stars">★★★★★</div>
+                <p>"Took my Eclipse diving in Bali. 40 metres deep, not a flinch. This brand gets it — performance meets
+                    swagger."</p>
+                <div class="author">
+                    <div class="avatar">J</div>
+                    <div class="author-info">
+                        <div class="name">James Otieno</div>
+                        <div class="role">Adventurer, Nairobi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section id="newsletter">
+        <div class="section-header reveal">
+            <div class="section-tag">⬥ Stay In The Loop</div>
+            <h2 class="section-title">Join The Rage</h2>
+            <p class="section-subtitle">Get early access to drops, exclusive discounts, and insider stories.</p>
+        </div>
+        <form class="newsletter-form reveal" onsubmit="handleSubscribe(event)">
+            <input type="email" id="email-input" placeholder="Enter your email" required>
+            <button type="submit" class="btn">Subscribe</button>
+        </form>
+        <p id="subscribe-msg"
+            style="text-align:center;margin-top:16px;color:#ff1e56;font-weight:600;opacity:0;transition:.4s;"></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo-text">RAGE</div>
+                <p>Bold timepieces for bold humans. Engineered without compromise, designed without fear.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram">IG</a>
+                    <a href="#" aria-label="Twitter">X</a>
+                    <a href="#" aria-label="YouTube">YT</a>
+                    <a href="#" aria-label="Facebook">FB</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Shop</h4>
+                <a href="#">New Arrivals</a>
+                <a href="#">Bestsellers</a>
+                <a href="#">Limited Editions</a>
+                <a href="#">Gift Cards</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="#">Blog</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <a href="#">FAQ</a>
+                <a href="#">Shipping</a>
+                <a href="#">Returns</a>
+                <a href="#">Warranty</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 RAGE Watches. All rights reserved. Designed with 🔥
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button id="back-top" aria-label="Back to top">↑</button>
+
+    <!-- ── JavaScript ──────────────────────────────────── -->
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 600);
+        });
+
+        // Particles
+        (function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 40; i++) {
+                const span = document.createElement('span');
+                span.style.left = Math.random() * 100 + '%';
+                span.style.top = Math.random() * 100 + '%';
+                span.style.animationDelay = (Math.random() * 8) + 's';
+                span.style.animationDuration = (6 + Math.random() * 6) + 's';
+                span.style.width = span.style.height = (2 + Math.random() * 3) + 'px';
+                container.appendChild(span);
+            }
+        })();
+
+        // Header scroll effect
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 60);
+        });
+
+        // Hamburger
+        const hamburger = document.getElementById('hamburger');
+        const nav = document.getElementById('main-nav');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            nav.classList.toggle('open');
+        });
+        // Close nav on link click
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                nav.classList.remove('open');
+            });
+        });
+
+        // Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Back to Top
+        const backTop = document.getElementById('back-top');
+        window.addEventListener('scroll', () => {
+            backTop.classList.toggle('show', window.scrollY > 500);
+        });
+        backTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Newsletter
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const msg = document.getElementById('subscribe-msg');
+            const input = document.getElementById('email-input');
+            msg.textContent = '🔥 You\'re in! Welcome to the RAGE family.';
+            msg.style.opacity = '1';
+            input.value = '';
+            setTimeout(() => { msg.style.opacity = '0'; }, 4000);
+        }
+
+        // Smooth parallax on hero
+        window.addEventListener('scroll', () => {
+            const hero = document.querySelector('.hero-content');
+            if (hero) {
+                const scroll = window.scrollY;
+                hero.style.transform = `translateY(${scroll * 0.3}px)`;
+                hero.style.opacity = 1 - scroll / 700;
+            }
+        });
+    </script>
+</body>
+
+</html>
